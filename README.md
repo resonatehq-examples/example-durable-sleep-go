@@ -106,9 +106,12 @@ Kill the worker mid-sleep (Ctrl-C). Run the same command again — the same prom
 [main] note: localnet state is ephemeral — crash recovery requires -url=<server>
 [main] invoking workflow id=durable-sleep-<timestamp> secs=3
   [workflow] sleeping for 3 second(s)...
+  [workflow] sleeping for 3 second(s)...
   [workflow] done — slept for 3 second(s)
 [main] OK: slept for 3 second(s)
 ```
+
+You'll see the workflow line twice — that's replay, not a bug. `ctx.Sleep` parks the workflow on a durable timer promise; when the timer fires, the runtime resumes by re-entering the workflow body from the top, so any `fmt.Println` calls before the `Sleep` run a second time. Wrapping the print in `ctx.Run` would make it idempotent under replay; the example leaves it bare to make the replay visible.
 
 **Real-server run with crash recovery:**
 
