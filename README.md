@@ -6,6 +6,12 @@
   </picture>
 </p>
 
+<p align="center">
+  <a href="https://resonatehq.github.io/examples-ci/">
+    <img src="https://img.shields.io/endpoint?url=https://resonatehq.github.io/examples-ci/status/example-durable-sleep-go.json" alt="examples-ci status">
+  </a>
+</p>
+
 # Durable Sleep | Resonate Go SDK
 
 A workflow that suspends for a configurable duration via Resonate's durable timer API. If the worker crashes mid-sleep, the timer promise is recorded server-side and the workflow resumes when the timer fires — long-duration sleeps (hours, days, weeks) survive worker restarts.
