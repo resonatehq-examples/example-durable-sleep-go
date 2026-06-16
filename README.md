@@ -95,13 +95,19 @@ In one terminal, start the dev server:
 resonate dev
 ```
 
-In another, run the example pointing at the server. Use a stable ID to enable re-attachment after a crash:
+In another, run the example pointing at the server:
 
 ```sh
 go run . -url=http://localhost:8001 -secs=30
 ```
 
-Kill the worker mid-sleep (Ctrl-C). Run the same command again — the same promise ID causes Resonate to resume the existing workflow from the timer rather than starting a new one. The workflow completes once the original timer fires.
+The binary defaults to promise ID `durable-sleep-1`. Kill the worker mid-sleep (Ctrl-C) and run the same command again — because the ID is the same, Resonate re-attaches to the existing workflow rather than starting a new one. The workflow completes once the original timer fires.
+
+To use a custom ID (for example, to run two independent workflows against the same server):
+
+```sh
+go run . -url=http://localhost:8001 -secs=30 -id=my-sleep-run
+```
 
 ## What to look for
 
@@ -110,7 +116,7 @@ Kill the worker mid-sleep (Ctrl-C). Run the same command again — the same prom
 ```
 [main] using localnet (in-process, no external server required)
 [main] note: localnet state is ephemeral — crash recovery requires -url=<server>
-[main] invoking workflow id=durable-sleep-<timestamp> secs=3
+[main] invoking workflow id=durable-sleep-1 secs=3
   [workflow] sleeping for 3 second(s)...
   [workflow] sleeping for 3 second(s)...
   [workflow] done — slept for 3 second(s)
@@ -121,8 +127,8 @@ You'll see the workflow line twice — that's replay, not a bug. `ctx.Sleep` par
 
 **Real-server run with crash recovery:**
 
-1. Start with `-secs=30` and kill mid-sleep.
-2. Run again with the same command — the workflow resumes from the server-side checkpoint.
+1. Start with `-secs=30` and kill mid-sleep (Ctrl-C).
+2. Run the same command again — the default `-id=durable-sleep-1` is unchanged, so Resonate re-attaches to the existing workflow rather than starting a new one.
 3. After ~30 seconds total, the result prints even though the worker restarted.
 
 You can inspect live and completed promise state on the dashboard at <http://localhost:8001>.
@@ -141,6 +147,7 @@ example-durable-sleep-go/
 
 ## Next steps
 
+- **Coming from Temporal?** See [MIGRATING-FROM-TEMPORAL.md](MIGRATING-FROM-TEMPORAL.md) — a side-by-side port of the matching `temporalio/samples-go` example.
 - [Get started](https://docs.resonatehq.io/get-started) — install paths + first-program walkthrough.
 - [Durable execution concepts](https://docs.resonatehq.io/concepts) — what makes invocations durable and how the runtime resumes them.
 - [Durable Sleep pattern](https://docs.resonatehq.io/get-started/examples/durable-sleep) — full documentation for this pattern.
