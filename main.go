@@ -69,6 +69,7 @@ func sleepingWorkflow(ctx *resonate.Context, args SleepArgs) (string, error) {
 func main() {
 	serverURL := flag.String("url", "", "Resonate server URL (e.g. http://localhost:8001). Omit to use localnet.")
 	sleepSecs := flag.Int64("secs", 3, "How many seconds to sleep.")
+	promiseID := flag.String("id", "durable-sleep-1", "Promise ID (idempotency key). Re-use the same ID after a crash to re-attach to the existing workflow.")
 	flag.Parse()
 
 	var cfg resonate.Config
@@ -103,10 +104,10 @@ func main() {
 	}
 
 	ctx := context.Background()
-	// A stable, unique ID per invocation. Resonate deduplicates on this ID, so
-	// re-running with the same ID after a crash resumes the existing workflow
-	// rather than starting a new one.
-	id := fmt.Sprintf("durable-sleep-%d", time.Now().UnixNano())
+	// The promise ID is the idempotency key. Resonate deduplicates on this ID,
+	// so re-running with the same ID after a crash re-attaches to the existing
+	// workflow rather than starting a new one. Pass -id=<value> to override.
+	id := *promiseID
 	args := SleepArgs{Secs: *sleepSecs}
 
 	fmt.Printf("[main] invoking workflow id=%s secs=%d\n", id, args.Secs)
