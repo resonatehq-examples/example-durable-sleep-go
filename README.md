@@ -59,7 +59,7 @@ func sleepingWorkflow(ctx *resonate.Context, args SleepArgs) (string, error) {
   ```sh
   brew install resonatehq/tap/resonate
   ```
-  Other install paths: <https://docs.resonatehq.io/get-started/install>.
+  Other install paths: <https://docs.resonatehq.io/get-started/quickstart>.
 
 ## Setup
 
@@ -149,7 +149,7 @@ example-durable-sleep-go/
 
 - **Coming from Temporal?** See [MIGRATING-FROM-TEMPORAL.md](MIGRATING-FROM-TEMPORAL.md) — a side-by-side port of the matching `temporalio/samples-go` example.
 - [Get started](https://docs.resonatehq.io/get-started) — install paths + first-program walkthrough.
-- [Durable execution concepts](https://docs.resonatehq.io/concepts) — what makes invocations durable and how the runtime resumes them.
+- [Durable execution concepts](https://docs.resonatehq.io/learn/durable-execution) — what makes invocations durable and how the runtime resumes them.
 - [Durable Sleep pattern](https://docs.resonatehq.io/get-started/examples/durable-sleep) — full documentation for this pattern.
 - [`example-hello-world-go`](https://github.com/resonatehq-examples/example-hello-world-go) — the simplest starting point: register a function, run it durably, read the result.
 - [`example-recursive-factorial-go`](https://github.com/resonatehq-examples/example-recursive-factorial-go) — recursive workflow + worker/client split in Go.
